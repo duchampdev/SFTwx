@@ -1,0 +1,7 @@
+.idea/
+CMakeFiles/
+Testing/
+CMakeCache.txt
+cmake_install.cmake
+SFTwx.cbp
+Makefile
