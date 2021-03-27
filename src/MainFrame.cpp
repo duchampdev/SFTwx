@@ -76,11 +76,11 @@ void MainFrame::OnStartCopy(wxCommandEvent &event) {
     }
     wxDir src_dir(m_src_dir);
     wxDir dst_dir(m_dst_dir);
-    if(dst_dir.HasFiles()) {
+    if(wxDir(m_dst_dir).HasFiles()) {
         this->SetStatusText("Zielverzeichnis beinhaltet Dateien. Abbruch");
         return;
     }
-    wxString srcLastDirName = src_dir.GetName().AfterLast('/').AfterLast('\\');
+    wxString srcLastDirName = wxFileName(m_src_dir).GetName();
     std::cout << "checking for " << dst_dir.GetNameWithSep() + srcLastDirName << std::endl;
     if(wxDirExists(dst_dir.GetNameWithSep() + srcLastDirName)) {
         this->SetStatusText("Zielverzeichnis beinhaltet Quellverzeichnis. Abbruch");
@@ -91,10 +91,36 @@ void MainFrame::OnStartCopy(wxCommandEvent &event) {
 }
 
 void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
-    int num_files_total = 0;
-    CountingDirTraverser traverser(num_files_total);
-    src.Traverse(traverser);
-    std::cout << "found " << num_files_total << " files" << std::endl;
+    int numFilesTotal = 0;
+    int filesCopied = 0;
+    CountingDirTraverser traverser(numFilesTotal);
+    wxDir(src.GetName()).Traverse(traverser);
+    std::cout << "found " << numFilesTotal << " files" << std::endl;
+    progressIndicator->SetRange(numFilesTotal);
+    CopyDir(src, dst, filesCopied);
+    std::cout << "'copied' " << filesCopied << " files." << std::endl;
 }
 
-void MainFrame::CopyDir(wxDir &src, wxDir &dst) {}
+void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& filesCopied) {
+    // copy files in DFS-manner
+    wxArrayString subdirs;
+    wxDir::GetAllFiles(src.GetName(), &subdirs, wxEmptyString, wxDIR_DIRS);
+    subdirs.Sort();
+    for(auto & subdir : subdirs) {
+        // recursively call CopyDir for contained dirs
+        wxDir newSrc(subdir);
+        wxDir newDst(dst.GetNameWithSep() + wxFileName(src.GetName()).GetName());
+        CopyDir(newSrc, newDst, filesCopied);
+    }
+
+    wxArrayString files;
+    wxDir::GetAllFiles(src.GetName(), &files, wxEmptyString, wxDIR_FILES);
+    for(auto& file: files) {
+        if(wxCopyFile(file, dst.GetNameWithSep() + wxFileName(file).GetFullName(), false)) {
+            progressIndicator->SetValue(++filesCopied);
+        } else {
+            std::cout << "failed to copy file " << file << std::endl;
+        }
+    }
+
+}

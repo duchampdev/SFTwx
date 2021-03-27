@@ -7,6 +7,7 @@
 #endif
 
 #include <wx/dir.h>
+#include <wx/filename.h>
 
 #include "CountingDirTraverser.hpp"
 
@@ -40,7 +41,7 @@ private:
     void OnExit(wxCommandEvent& event);
 
     void PerformCopy(wxDir& src, wxDir& dst);
-    void CopyDir(wxDir& src, wxDir& dst);
+    void CopyDir(wxDir& src, wxDir& dst, int& filesCopied);
 
     wxDECLARE_EVENT_TABLE();
 };
