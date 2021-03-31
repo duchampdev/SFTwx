@@ -10,6 +10,7 @@
 #include <wx/filename.h>
 
 #include "CountingDirTraverser.hpp"
+#include "SubdirListTraverser.hpp"
 
 
 class MainFrame : public wxFrame {

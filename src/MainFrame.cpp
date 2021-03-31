@@ -104,9 +104,10 @@ void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
 void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& filesCopied) {
     // copy files in DFS-manner
     wxArrayString subdirs;
-    wxDir::GetAllFiles(src.GetName(), &subdirs, wxEmptyString, wxDIR_DIRS);
+    SubdirListTraverser traverser(subdirs);
+    src.Traverse(traverser);
     subdirs.Sort();
-    for(auto & subdir : subdirs) {
+    for(auto& subdir : subdirs) {
         // recursively call CopyDir for contained dirs
         wxDir newSrc(subdir);
         wxDir newDst(dst.GetNameWithSep() + wxFileName(src.GetName()).GetName());
