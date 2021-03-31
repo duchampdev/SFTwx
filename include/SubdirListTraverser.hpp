@@ -5,7 +5,7 @@ public:
     SubdirListTraverser(wxArrayString& dir_names): m_dir_names(dir_names) {}
 
     wxDirTraverseResult OnFile(const wxString &filename) override {
-        return wxDIR_IGNORE;
+        return wxDIR_CONTINUE;
     }
 
     wxDirTraverseResult OnDir(const wxString &dirname) override {
