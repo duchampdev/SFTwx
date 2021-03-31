@@ -1,5 +1,4 @@
-#ifndef SFTWX_COUNTING_DIR_TRAVERSER_H
-#define SFTWX_COUNTING_DIR_TRAVERSER_H
+#pragma once
 
 #include <wx/dir.h>
 
@@ -19,5 +18,3 @@ public:
 private:
     int& m_num_files;
 };
-
-#endif //SFTWX_COUNTING_DIR_TRAVERSER_H

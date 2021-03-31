@@ -1,5 +1,4 @@
-#ifndef SFTWX_MAINFRAME_H
-#define SFTWX_MAINFRAME_H
+#pragma once
 
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
@@ -54,5 +53,3 @@ enum {
     ID_MP3_ONLY = wxID_HIGHEST + 4,
     ID_PROGRESS = wxID_HIGHEST + 5
 };
-
-#endif //SFTWX_MAINFRAME_H

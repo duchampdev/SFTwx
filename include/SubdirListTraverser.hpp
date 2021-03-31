@@ -1,5 +1,4 @@
-#ifndef SFTWX_SUBDIRLISTTRAVERSER_H
-#define SFTWX_SUBDIRLISTTRAVERSER_H
+#pragma once
 
 class SubdirListTraverser: public wxDirTraverser {
 public:
@@ -17,5 +16,3 @@ public:
 private:
     wxArrayString& m_dir_names;
 };
-
-#endif //SFTWX_SUBDIRLISTTRAVERSER_H
