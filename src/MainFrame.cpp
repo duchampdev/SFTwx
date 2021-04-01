@@ -105,21 +105,31 @@ void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& filesCopied) {
     // copy files in DFS-manner
     wxArrayString subdirs;
     SubdirListTraverser traverser(subdirs);
+
+    // create src dir in dst
+    const wxString dst_targetsubdir_path(dst.GetNameWithSep() + wxFileName(src.GetName()).GetName());
+    if(!wxDir::Make(dst_targetsubdir_path)) {
+        this->SetStatusText("Fehler beim Kopieren! Ziel-Subverzeichnus konnte nicht erstellt werden. Verzeichnis ausgelassen");
+        std::cout << "could not create dir: " << dst_targetsubdir_path << std::endl;
+        return;
+    }
+    wxDir dst_targetsubdir(dst_targetsubdir_path);
+
     src.Traverse(traverser);
     subdirs.Sort();
     for(auto& subdir : subdirs) {
         // recursively call CopyDir for contained dirs
         wxDir newSrc(subdir);
-        wxDir newDst(dst.GetNameWithSep() + wxFileName(src.GetName()).GetName());
-        CopyDir(newSrc, newDst, filesCopied);
+        CopyDir(newSrc, dst_targetsubdir, filesCopied);
     }
 
     wxArrayString files;
     wxDir::GetAllFiles(src.GetName(), &files, wxEmptyString, wxDIR_FILES);
     for(auto& file: files) {
-        if(wxCopyFile(file, dst.GetNameWithSep() + wxFileName(file).GetFullName(), false)) {
+        if(wxCopyFile(file, dst_targetsubdir.GetNameWithSep() + wxFileName(file).GetFullName(), false)) {
             progressIndicator->SetValue(++filesCopied);
         } else {
+            this->SetStatusText("Fehler beim Kopieren einer Datei. Datei ausgelassen");
             std::cout << "failed to copy file " << file << std::endl;
         }
     }
