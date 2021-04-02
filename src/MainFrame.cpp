@@ -1,5 +1,12 @@
 #include "MainFrame.hpp"
 
+#ifndef NDEBUG
+#define DBG(x) x
+#else
+#define DBG(x) if(false) x
+#endif
+
+
 MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size): wxFrame(nullptr, wxID_ANY, title, pos, size) {
     menu_main = new wxMenu();
     menu_main->Append(wxID_EXIT);
@@ -80,7 +87,7 @@ void MainFrame::OnStartCopy(wxCommandEvent &event) {
         return;
     }
     wxString src_most_inner_dir_name = wxFileName(m_src_dir).GetName();
-    std::cout << "checking for " << dst_dir.GetNameWithSep() + src_most_inner_dir_name << std::endl;
+    DBG(std::cout << "checking for " << dst_dir.GetNameWithSep() + src_most_inner_dir_name << std::endl);
     if(wxDirExists(dst_dir.GetNameWithSep() + src_most_inner_dir_name)) {
         this->SetStatusText("Zielverzeichnis beinhaltet Quellverzeichnis. Abbruch");
         return;
@@ -93,11 +100,11 @@ void MainFrame::PerformCopy(const wxDir& src, const wxDir& dst) {
     int num_files_total = 0;
     int files_copied = 0;
     CountingDirTraverser traverser(num_files_total, m_mp3_only);
-    wxDir(src.GetName()).Traverse(traverser);
-    std::cout << "found " << num_files_total << " files" << std::endl;
+    src.Traverse(traverser);
+    DBG(std::cout << "found " << num_files_total << " files" << std::endl);
     progressbar->SetRange(num_files_total);
     CopyDir(src, dst, files_copied);
-    std::cout << "copied " << files_copied << " files." << std::endl;
+    DBG(std::cout << "copied " << files_copied << " files." << std::endl);
     this->SetStatusText(std::to_string(files_copied) + " Dateien erfolgreich kopiert.");
 }
 
@@ -110,7 +117,7 @@ void MainFrame::CopyDir(const wxDir& src, const wxDir& dst, int& files_copied) {
     const wxString dst_targetsubdir_path(dst.GetNameWithSep() + wxFileName(src.GetName()).GetName());
     if(!wxDir::Make(dst_targetsubdir_path)) {
         this->SetStatusText("Fehler beim Kopieren! Ziel-Subverzeichnus konnte nicht erstellt werden. Verzeichnis ausgelassen");
-        std::cout << "could not create dir: " << dst_targetsubdir_path << std::endl;
+        DBG(std::cout << "could not create dir: " << dst_targetsubdir_path << std::endl);
         return;
     }
     wxDir dst_targetsubdir(dst_targetsubdir_path);
@@ -131,7 +138,7 @@ void MainFrame::CopyDir(const wxDir& src, const wxDir& dst, int& files_copied) {
             progressbar->SetValue(++files_copied);
         } else {
             this->SetStatusText("Fehler beim Kopieren einer Datei. Datei ausgelassen");
-            std::cout << "failed to copy file " << file << std::endl;
+            DBG(std::cout << "failed to copy file " << file << std::endl);
         }
     }
 
