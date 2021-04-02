@@ -4,10 +4,12 @@
 
 class CountingDirTraverser: public wxDirTraverser {
 public:
-    CountingDirTraverser(int& num_files): m_num_files(num_files) {}
+    CountingDirTraverser(int& num_files, const bool mp3_only): m_num_files(num_files), m_mp3_only(mp3_only) {}
 
     wxDirTraverseResult OnFile(const wxString &filename) override {
-        m_num_files++;
+        if(!m_mp3_only || filename.Lower().EndsWith(".mp3")) {
+            m_num_files++;
+        }
         return wxDIR_CONTINUE;
     }
 
@@ -17,4 +19,5 @@ public:
 
 private:
     int& m_num_files;
+    const bool m_mp3_only;
 };

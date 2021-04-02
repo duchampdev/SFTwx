@@ -93,7 +93,7 @@ void MainFrame::OnStartCopy(wxCommandEvent &event) {
 void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
     int numFilesTotal = 0;
     int filesCopied = 0;
-    CountingDirTraverser traverser(numFilesTotal);
+    CountingDirTraverser traverser(numFilesTotal, m_mp3Only);
     wxDir(src.GetName()).Traverse(traverser);
     std::cout << "found " << numFilesTotal << " files" << std::endl;
     progressIndicator->SetRange(numFilesTotal);
@@ -126,6 +126,7 @@ void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& filesCopied) {
     wxArrayString files;
     wxDir::GetAllFiles(src.GetName(), &files, wxEmptyString, wxDIR_FILES);
     for(auto& file: files) {
+        if(m_mp3Only && !file.Lower().EndsWith(".mp3")) continue;
         if(wxCopyFile(file, dst_targetsubdir.GetNameWithSep() + wxFileName(file).GetFullName(), false)) {
             progressIndicator->SetValue(++filesCopied);
         } else {
