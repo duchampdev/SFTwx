@@ -1,6 +1,5 @@
 #include "MainFrame.hpp"
 
-
 MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &size): wxFrame(nullptr, wxID_ANY, title, pos, size) {
     menu_main = new wxMenu();
     menu_main->Append(wxID_EXIT);
@@ -98,7 +97,8 @@ void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
     std::cout << "found " << num_files_total << " files" << std::endl;
     progressbar->SetRange(num_files_total);
     CopyDir(src, dst, files_copied);
-    std::cout << "'copied' " << files_copied << " files." << std::endl;
+    std::cout << "copied " << files_copied << " files." << std::endl;
+    this->SetStatusText(std::to_string(files_copied) + " Dateien erfolgreich kopiert.");
 }
 
 void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& files_copied) {
