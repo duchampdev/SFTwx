@@ -89,7 +89,7 @@ void MainFrame::OnStartCopy(wxCommandEvent &event) {
     this->PerformCopy(src_dir, dst_dir);
 }
 
-void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
+void MainFrame::PerformCopy(const wxDir& src, const wxDir& dst) {
     int num_files_total = 0;
     int files_copied = 0;
     CountingDirTraverser traverser(num_files_total, m_mp3_only);
@@ -101,7 +101,7 @@ void MainFrame::PerformCopy(wxDir& src, wxDir& dst) {
     this->SetStatusText(std::to_string(files_copied) + " Dateien erfolgreich kopiert.");
 }
 
-void MainFrame::CopyDir(wxDir& src, wxDir& dst, int& files_copied) {
+void MainFrame::CopyDir(const wxDir& src, const wxDir& dst, int& files_copied) {
     // copy files in DFS-manner
     wxArrayString subdirs;
     SubdirListTraverser traverser(subdirs);

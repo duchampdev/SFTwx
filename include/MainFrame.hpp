@@ -40,8 +40,8 @@ private:
 
     void OnExit(wxCommandEvent& event);
 
-    void PerformCopy(wxDir& src, wxDir& dst);
-    void CopyDir(wxDir& src, wxDir& dst, int& files_copied);
+    void PerformCopy(const wxDir& src, const wxDir& dst);
+    void CopyDir(const wxDir& src, const wxDir& dst, int& files_copied);
 
     wxDECLARE_EVENT_TABLE();
 };
