@@ -17,21 +17,21 @@ public:
     MainFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
 private:
-    wxBoxSizer* mainSizer;
-    wxBoxSizer* progressAndStartSizer;
+    wxBoxSizer* main_sizer;
+    wxBoxSizer* progress_and_start_sizer;
 
-    wxMenuBar* menuBar;
-    wxMenu* mainMenu;
+    wxMenuBar* menu_bar;
+    wxMenu* menu_main;
 
-    wxButton* btnSrc;
-    wxButton* btnDst;
-    wxCheckBox* mp3OnlyCheckBox;
-    wxGauge* progressIndicator;
-    wxButton* btnStart;
+    wxButton* button_src;
+    wxButton* button_dst;
+    wxCheckBox* toggle_mp3_only;
+    wxGauge* progressbar;
+    wxButton* button_start;
 
     wxString m_src_dir;
     wxString m_dst_dir;
-    bool m_mp3Only = false;
+    bool m_mp3_only = false;
 
     void OnChooseSrc(wxCommandEvent& event);
     void OnChooseDst(wxCommandEvent& event);
@@ -41,7 +41,7 @@ private:
     void OnExit(wxCommandEvent& event);
 
     void PerformCopy(wxDir& src, wxDir& dst);
-    void CopyDir(wxDir& src, wxDir& dst, int& filesCopied);
+    void CopyDir(wxDir& src, wxDir& dst, int& files_copied);
 
     wxDECLARE_EVENT_TABLE();
 };
