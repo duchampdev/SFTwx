@@ -48,7 +48,7 @@ MainFrame::MainFrame(const wxString &title, const wxPoint &pos, const wxSize &si
 }
 
 void MainFrame::OnExit(wxCommandEvent &event) {
-    Close(true);
+    this->Destroy();
 }
 
 void MainFrame::OnChooseSrc(wxCommandEvent &event) {
@@ -132,6 +132,7 @@ void MainFrame::CopyDir(const wxDir& src, const wxDir& dst, int& files_copied) {
 
     wxArrayString files;
     wxDir::GetAllFiles(src.GetName(), &files, wxEmptyString, wxDIR_FILES);
+    files.Sort();
     for(auto& file: files) {
         if(m_mp3_only && !file.Lower().EndsWith(".mp3")) continue;
         if(wxCopyFile(file, dst_targetsubdir.GetNameWithSep() + wxFileName(file).GetFullName(), false)) {
